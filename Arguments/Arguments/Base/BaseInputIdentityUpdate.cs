@@ -1,4 +1,4 @@
-﻿namespace Application.Arguments
+﻿namespace Arguments.Arguments
 {
     public abstract class BaseInputIdentityUpdate<TInputUpdate> where TInputUpdate : BaseInputUpdate<TInputUpdate>
     {

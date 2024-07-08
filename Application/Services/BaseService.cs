@@ -1,21 +1,19 @@
-﻿using Application.Arguments;
+﻿using Arguments.Arguments;
 using Domain.Models;
 using Infrastructure.Repositories;
 
 namespace Application.Services
 {
-    public abstract class BaseService<TEntry, TRepository, TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput, TOutputHandler> : IBaseService<TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput>
+    public abstract class BaseService<TEntry, TRepository, TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput> : IBaseService<TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput>
         where TEntry : BaseEntry<TEntry>
         where TRepository : IBaseRepository<TEntry>
         where TInputCreate : BaseInputCreate<TInputCreate>
         where TInputUpdate : BaseInputUpdate<TInputUpdate>
         where TInputIdentityUpdate : BaseInputIdentityUpdate<TInputUpdate>
         where TInputIdentityDelete : BaseInputIdentityDelete<TInputIdentityDelete>
-        where TOutput : BaseOutput<TOutput>
-        where TOutputHandler : BaseOutputHandler<TEntry, TOutput>, new()
+        where TOutput : BaseOutput<TOutput>        
     {
         protected readonly TRepository _repository;
-        protected TOutputHandler _outputHandler = new TOutputHandler();
 
         public BaseService(TRepository repository)
         {
@@ -52,12 +50,12 @@ namespace Application.Services
 
         internal TOutput? EntryToOutput(TEntry? entrada)
         {
-            return _outputHandler.ToOutput(entrada);
+            return (TOutput)(dynamic)entrada;
         }
 
         internal List<TOutput?> EntryToOutput(List<TEntry?> entrada)
         {
-            return (from item in entrada select _outputHandler.ToOutput(item)).ToList();
+            return (from item in entrada select (TOutput)(dynamic)entrada).ToList();
         }
 
     }

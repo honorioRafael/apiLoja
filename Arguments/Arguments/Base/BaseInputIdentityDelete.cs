@@ -1,4 +1,4 @@
-﻿namespace Application.Arguments
+﻿namespace Arguments.Arguments
 {
     public abstract class BaseInputIdentityDelete<TInpuIdentityDelete> where TInpuIdentityDelete : BaseInputIdentityDelete<TInpuIdentityDelete>
     {

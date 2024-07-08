@@ -1,4 +1,4 @@
-﻿namespace Application.Arguments
+﻿namespace Arguments.Arguments
 {
     public class BrandOutput : BaseOutput<BrandOutput>
     {
@@ -6,9 +6,8 @@
 
         public BrandOutput() { }
 
-        public BrandOutput(long id, string name)
+        public BrandOutput(string name)
         {
-            Id = id;
             Name = name;
         }
     }

@@ -6,7 +6,4 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Arguments\Arguments.csproj" />
-  </ItemGroup>
 </Project>

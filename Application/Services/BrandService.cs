@@ -1,10 +1,10 @@
-﻿using Application.Arguments;
+﻿using Arguments.Arguments;
 using Domain.Models;
 using Infrastructure.Repositories;
 
 namespace Application.Services
 {
-    public class BrandService : BaseService<Brand, IBrandRepository, BrandInputCreate, BrandInputUpdate, BrandInputIdentityUpdate, BrandInputIdentityDelete, BrandOutput, BrandOutputHandler>, IBrandService
+    public class BrandService : BaseService<Brand, IBrandRepository, BrandInputCreate, BrandInputUpdate, BrandInputIdentityUpdate, BrandInputIdentityDelete, BrandOutput>, IBrandService
     {
         public BrandService(IBrandRepository repository) : base(repository)
         { }

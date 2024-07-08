@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Arguments
+namespace Arguments.Arguments
 {
     public class NameInUseException : Exception
     {

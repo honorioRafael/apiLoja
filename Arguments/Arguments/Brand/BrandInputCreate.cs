@@ -1,4 +1,4 @@
-﻿namespace Application.Arguments
+﻿namespace Arguments.Arguments
 {
     public class BrandInputCreate : BaseInputCreate<BrandInputCreate>
     {

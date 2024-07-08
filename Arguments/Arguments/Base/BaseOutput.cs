@@ -1,4 +1,4 @@
-﻿namespace Application.Arguments
+﻿namespace Arguments.Arguments
 {
     public abstract class BaseOutput<TOutput> where TOutput : BaseOutput<TOutput>
     {

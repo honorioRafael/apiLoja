@@ -1,4 +1,6 @@
-﻿namespace Domain.Models
+﻿using Arguments.Arguments;
+
+namespace Domain.Models
 {
     public class Brand : BaseEntry<Brand>
     {
@@ -19,9 +21,9 @@
         //    Name = name;
         //}
 
-        /*public static implicit operator BrandOutput(Brand brand)
+        public static implicit operator BrandOutput(Brand brand)
         {
             return brand == null ? default : new BrandOutput(brand.Name).LoadInternalData(brand.Id, brand.CreationDate, brand.ChangeDate);
-        }*/
+        }
     }
 }
