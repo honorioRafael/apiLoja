@@ -22,7 +22,24 @@ namespace ApiLoja.Controllers
             {
                 return NotFound();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        public override IActionResult Update(BrandInputIdentityUpdate inputIdentityUpdate)
+        {
+            try
+            {
+                var CreatedBrandId = _service.Update(inputIdentityUpdate);
+                return Ok(CreatedBrandId);
+            }
+            catch (ArgumentNullException ex)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

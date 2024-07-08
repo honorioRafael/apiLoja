@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Domain.Models
+﻿namespace Domain.Models
 {
-    public class BaseEntry<TEntry> 
+    public class BaseEntry<TEntry>
         where TEntry : BaseEntry<TEntry>
     {
         public long Id { get; set; }
         public DateTime CreationDate { get; set; }
         public DateTime? ChangeDate { get; set; }
 
-        public TEntry LoadInternalData(int id, DateTime creationDate, DateTime? changeDate)
+        public TEntry LoadInternalData(long id, DateTime creationDate, DateTime? changeDate)
         {
             Id = id;
             CreationDate = creationDate;

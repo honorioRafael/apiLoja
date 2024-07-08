@@ -1,15 +1,10 @@
 ﻿using Application.Arguments;
 using Domain.Models;
 using Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class BrandService : BaseService<Brand, IBrandRepository, BrandInputCreate, BrandInputUpdate, BrandInputIdentityUpdate, BrandInputIdentityDelete, BrandOutput>, IBrandService
+    public class BrandService : BaseService<Brand, IBrandRepository, BrandInputCreate, BrandInputUpdate, BrandInputIdentityUpdate, BrandInputIdentityDelete, BrandOutput, BrandOutputHandler>, IBrandService
     {
         public BrandService(IBrandRepository repository) : base(repository)
         { }
@@ -19,14 +14,17 @@ namespace Application.Services
             var ExistingBrand = _repository.GetByName(inputCreate.Name);
             if (ExistingBrand != null) throw new NameInUseException("Esse nome ja está em uso");
 
-            var ItemToCreate = _repository.Create(new Brand(inputCreate.Name));
+            var ItemToCreate = _repository.Create(new Brand(inputCreate.Name).SetCreationDate());
             return ItemToCreate;
         }
 
-        public class NameInUseException : Exception
+        public override long Update(BrandInputIdentityUpdate inputIdentityUpdate)
         {
-            public NameInUseException(string message) : base(message)
-            { }
+            var OriginalItem = _repository.Get(inputIdentityUpdate.Id);
+            if (OriginalItem == null) throw new NotFoundException();
+
+            var ItemToCreate = _repository.Update(new Brand(inputIdentityUpdate.InputUpdate.Name).LoadInternalData(OriginalItem.Id, OriginalItem.CreationDate, OriginalItem.ChangeDate).SetChangeDate());
+            return ItemToCreate;
         }
     }
 }

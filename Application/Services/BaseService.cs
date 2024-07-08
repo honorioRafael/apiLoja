@@ -1,15 +1,10 @@
 ﻿using Application.Arguments;
 using Domain.Models;
 using Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public abstract class BaseService<TEntry, TRepository, TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput> : IBaseService<TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput>
+    public abstract class BaseService<TEntry, TRepository, TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput, TOutputHandler> : IBaseService<TInputCreate, TInputUpdate, TInputIdentityUpdate, TInputIdentityDelete, TOutput>
         where TEntry : BaseEntry<TEntry>
         where TRepository : IBaseRepository<TEntry>
         where TInputCreate : BaseInputCreate<TInputCreate>
@@ -17,8 +12,10 @@ namespace Application.Services
         where TInputIdentityUpdate : BaseInputIdentityUpdate<TInputUpdate>
         where TInputIdentityDelete : BaseInputIdentityDelete<TInputIdentityDelete>
         where TOutput : BaseOutput<TOutput>
+        where TOutputHandler : BaseOutputHandler<TEntry, TOutput>, new()
     {
         protected readonly TRepository _repository;
+        protected TOutputHandler _outputHandler = new TOutputHandler();
 
         public BaseService(TRepository repository)
         {
@@ -30,9 +27,17 @@ namespace Application.Services
             throw new NotImplementedException();
         }
 
-        public virtual void Delete(TInputIdentityDelete inputIdentityDelete)
+        public virtual long Update(TInputIdentityUpdate inputIdentityUpdate)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual void Delete(TInputIdentityDelete inputIdentityDelete)
+        {
+            var ToBeDeleted = _repository.Get(inputIdentityDelete.Id);
+            if (ToBeDeleted == null) throw new ItemNotFoundException();
+            
+            _repository.Delete(ToBeDeleted);
         }
 
         public virtual TOutput? Get(long id)
@@ -45,19 +50,14 @@ namespace Application.Services
             return EntryToOutput(_repository.GetAll());
         }
 
-        public virtual long Update(TInputIdentityUpdate inputIdentityUpdate)
-        {
-            throw new NotImplementedException();
-        }
-
         internal TOutput? EntryToOutput(TEntry? entrada)
         {
-            return (TOutput?)(dynamic?)entrada;
+            return _outputHandler.ToOutput(entrada);
         }
 
         internal List<TOutput?> EntryToOutput(List<TEntry?> entrada)
         {
-            return (from item in entrada select (TOutput?)(dynamic?)item).ToList();
+            return (from item in entrada select _outputHandler.ToOutput(item)).ToList();
         }
 
     }

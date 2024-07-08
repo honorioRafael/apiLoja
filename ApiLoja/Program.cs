@@ -1,9 +1,7 @@
-using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Application.Services;
 using Infrastructure.Mappings;
 using Infrastructure.Repositories;
-using Application.Services;
-using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

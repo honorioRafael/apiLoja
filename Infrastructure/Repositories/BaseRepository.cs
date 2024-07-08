@@ -1,12 +1,6 @@
-﻿using Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Domain.Models;
 using Infrastructure.Mappings;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -24,7 +18,7 @@ namespace Infrastructure.Repositories
 
         public long Create(TEntry entry)
         {
-            return CreateRange([entry.SetCreationDate()]);
+            return CreateRange([entry]);
         }
 
         public long CreateRange(List<TEntry> entry)
@@ -36,23 +30,26 @@ namespace Infrastructure.Repositories
 
         public void Delete(TEntry entry)
         {
-            throw new NotImplementedException();
+            DeleteRange([entry]);
         }
 
 
         public void DeleteRange(List<TEntry> entry)
         {
-            throw new NotImplementedException();
+            _context.RemoveRange(entry);
+            _context.SaveChanges();
         }
 
         public long Update(TEntry entry)
         {
-            throw new NotImplementedException();
+            return UpdateRange([entry]);
         }
 
         public long UpdateRange(List<TEntry> entry)
         {
-            throw new NotImplementedException();
+            _context.UpdateRange(entry);
+            _context.SaveChanges();
+            return entry[0].Id;
         }
 
         public TEntry? Get(long id)

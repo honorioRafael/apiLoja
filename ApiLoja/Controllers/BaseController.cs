@@ -9,7 +9,7 @@ namespace ApiLoja.Controllers
         where TInputCreate : BaseInputCreate<TInputCreate>
         where TInputUpdate : BaseInputUpdate<TInputUpdate>
         where TInputIdentityUpdate : BaseInputIdentityUpdate<TInputUpdate>
-        where TInputIdentityDelete : BaseInputIdentityDelete<TInputIdentityDelete>
+        where TInputIdentityDelete : BaseInputIdentityDelete<TInputIdentityDelete>, new()
         where TOutput : BaseOutput<TOutput>
     {
         protected readonly TService _service;
@@ -17,6 +17,36 @@ namespace ApiLoja.Controllers
         public BaseController(TService service)
         {
             _service = service;
+        }
+
+        [HttpPost]
+        public virtual IActionResult Create(TInputCreate inputCreate)
+        {
+            throw new NotImplementedException();
+        }
+
+        [HttpPut]
+        public virtual IActionResult Update(TInputIdentityUpdate inputIdentityUpdate) 
+        {
+            throw new NotImplementedException(); 
+        }
+
+        [HttpDelete]
+        public virtual IActionResult Delete(long id) 
+        {
+            try
+            {
+                _service.Delete(new TInputIdentityDelete() { Id = id });
+                return Ok();
+            }
+            catch (ItemNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            { 
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -30,12 +60,6 @@ namespace ApiLoja.Controllers
         public virtual IActionResult GetAll(long id)
         {
             return Ok(_service.Get(id));
-        }
-
-        [HttpPost]
-        public virtual IActionResult Create(TInputCreate inputCreate)
-        {
-            throw new NotImplementedException();
         }
     }
 }
