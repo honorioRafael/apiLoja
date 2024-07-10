@@ -14,7 +14,7 @@ namespace Domain.Models
         {
             Name = name;
         }
-        
+
         //public Brand(long id, string name)
         //{
         //    Id = id;

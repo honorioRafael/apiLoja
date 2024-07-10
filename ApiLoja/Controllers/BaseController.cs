@@ -1,5 +1,5 @@
-﻿using Arguments.Arguments;
-using Application.Services;
+﻿using Application.Services;
+using Arguments.Arguments;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiLoja.Controllers
@@ -22,17 +22,43 @@ namespace ApiLoja.Controllers
         [HttpPost]
         public virtual IActionResult Create(TInputCreate inputCreate)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return Ok(_service.Create(inputCreate));
+            }
+            catch (ArgumentNullException)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut]
-        public virtual IActionResult Update(TInputIdentityUpdate inputIdentityUpdate) 
+        public virtual IActionResult Update(TInputIdentityUpdate inputIdentityUpdate)
         {
-            throw new NotImplementedException(); 
+            try
+            {
+                return Ok(_service.Update(inputIdentityUpdate));
+            }
+            catch (ArgumentNullException)
+            {
+                return NotFound();
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpDelete]
-        public virtual IActionResult Delete(long id) 
+        public virtual IActionResult Delete(long id)
         {
             try
             {
@@ -44,7 +70,7 @@ namespace ApiLoja.Controllers
                 return NotFound(ex.Message);
             }
             catch (Exception ex)
-            { 
+            {
                 return BadRequest(ex.Message);
             }
         }
@@ -63,19 +89,3 @@ namespace ApiLoja.Controllers
         }
     }
 }
-
-/*
- try
-            {
-                var QueryResult = _service.Get(id);
-                return Ok(QueryResult);
-            }
-            catch (ArgumentNullException ex)
-            {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
- */

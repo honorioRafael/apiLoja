@@ -11,7 +11,7 @@ namespace Application.Services
         where TInputUpdate : BaseInputUpdate<TInputUpdate>
         where TInputIdentityUpdate : BaseInputIdentityUpdate<TInputUpdate>
         where TInputIdentityDelete : BaseInputIdentityDelete<TInputIdentityDelete>
-        where TOutput : BaseOutput<TOutput>        
+        where TOutput : BaseOutput<TOutput>
     {
         protected readonly TRepository _repository;
 
@@ -34,7 +34,7 @@ namespace Application.Services
         {
             var ToBeDeleted = _repository.Get(inputIdentityDelete.Id);
             if (ToBeDeleted == null) throw new ItemNotFoundException();
-            
+
             _repository.Delete(ToBeDeleted);
         }
 

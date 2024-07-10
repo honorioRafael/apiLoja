@@ -6,25 +6,31 @@ namespace Application.Services
 {
     public class BrandService : BaseService<Brand, IBrandRepository, BrandInputCreate, BrandInputUpdate, BrandInputIdentityUpdate, BrandInputIdentityDelete, BrandOutput>, IBrandService
     {
-        public BrandService(IBrandRepository repository) : base(repository)
+        public BrandService(IBrandRepository brandRepository) : base(brandRepository)
         { }
 
-        public override long Create(BrandInputCreate inputCreate)
+        public override long Create(BrandInputCreate inputCreateBrand)
         {
-            var ExistingBrand = _repository.GetByName(inputCreate.Name);
+            // Se a entrada esta nula
+            if (inputCreateBrand == null) throw new ArgumentNullException();
+            var ExistingBrand = _repository.GetByName(inputCreateBrand.Name);
             if (ExistingBrand != null) throw new NameInUseException("Esse nome ja está em uso");
 
-            var ItemToCreate = _repository.Create(new Brand(inputCreate.Name).SetCreationDate());
-            return ItemToCreate;
+            var BrandToCreate = _repository.Create(new Brand(inputCreateBrand.Name).SetCreationDate());
+            return BrandToCreate;
         }
 
-        public override long Update(BrandInputIdentityUpdate inputIdentityUpdate)
+        public override long Update(BrandInputIdentityUpdate inputIdentityUpdateBrand)
         {
-            var OriginalItem = _repository.Get(inputIdentityUpdate.Id);
-            if (OriginalItem == null) throw new NotFoundException();
+            // Nenhum valor informado
+            if (inputIdentityUpdateBrand == null) throw new ArgumentNullException();
+            // Id negativo
+            if (inputIdentityUpdateBrand.Id < 0) throw new NotFoundException();
+            // Aquisição e verificação de ID
+            var OriginalBrand = _repository.Get(inputIdentityUpdateBrand.Id);
+            if (OriginalBrand == null) throw new NotFoundException();
 
-            var ItemToCreate = _repository.Update(new Brand(inputIdentityUpdate.InputUpdate.Name).LoadInternalData(OriginalItem.Id, OriginalItem.CreationDate, OriginalItem.ChangeDate).SetChangeDate());
-            return ItemToCreate;
+            return _repository.Update(new Brand(inputIdentityUpdateBrand.InputUpdate.Name).LoadInternalData(OriginalBrand.Id, OriginalBrand.CreationDate, OriginalBrand.ChangeDate).SetChangeDate());
         }
     }
 }
